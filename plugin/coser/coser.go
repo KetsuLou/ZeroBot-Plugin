@@ -43,7 +43,7 @@ func init() {
 			if err != nil {
 				return "", err
 			}
-			arr := gjson.Get(helper.BytesToString(data), "data.data").Array()
+			arr := gjson.Get(helper.BytesToString(data), "data.images").Array()
 			if len(arr) == 0 {
 				return "", errors.New("data is empty")
 			}

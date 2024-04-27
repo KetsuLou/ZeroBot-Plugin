@@ -100,7 +100,26 @@ func init() { // 插件主体
 				ctx.SendChain(message.Text("ERROR: 可能被风控了"))
 			}
 		})
-
+	engine.OnFullMatch(`涩图`, getdb).SetBlock(true).Limit(ctxext.LimitByUser).
+		Handle(func(ctx *zero.Ctx) {
+			var imgtype = "涩图"
+			// 补充池子
+			go pool.fill(ctx, imgtype)
+			// 如果没有缓存，阻塞10秒
+			if pool.size(imgtype) == 0 {
+				ctx.SendChain(message.Text("INFO: 正在填充弹药......"))
+				time.Sleep(time.Second * 10)
+				if pool.size(imgtype) == 0 {
+					ctx.SendChain(message.Text("ERROR: 等待填充，请稍后再试......"))
+					return
+				}
+			}
+			// 从缓冲池里抽一张
+			m := message.Message{ctxext.FakeSenderForwardNode(ctx, *pool.pop(imgtype))}
+			if id := ctx.Send(m).ID(); id == 0 {
+				ctx.SendChain(message.Text("ERROR: 可能被风控了"))
+			}
+		})
 	engine.OnRegex(`^添加\s*([^0-9\s]+)\s*(\d+)$`, zero.SuperUserPermission, getdb).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			var (

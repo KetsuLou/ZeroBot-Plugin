@@ -69,7 +69,7 @@ func init() {
 					}
 					money := wallet.GetWalletOf(uid)
 					if money < 100 {
-						ctx.SendChain(message.Text("你钱包当前只有", money, "ATRI币,无法完成支付"))
+						ctx.SendChain(message.Text("你钱包当前只有", money, "杀币,无法完成支付"))
 						return
 					}
 					err = wallet.InsertWalletOf(uid, -100)
@@ -152,7 +152,7 @@ func init() {
 			msg += ")"
 			fishNumber /= 2
 		}
-		waitTime := 120 / (equipInfo.Induce + 1)
+		waitTime := 60 / (equipInfo.Induce + 1)
 		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("你开始去钓鱼了,请耐心等待鱼上钩(预计要", time.Second*time.Duration(waitTime), ")"))
 		timer := time.NewTimer(time.Second * time.Duration(rand.Intn(waitTime)+1))
 		for {
