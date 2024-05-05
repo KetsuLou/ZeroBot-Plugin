@@ -62,18 +62,15 @@ import (
 
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/ahsai"            // ahsai tts
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/aifalse"          // 服务器监控
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/aipaint"          // ai绘图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/aiwife"           // 随机老婆
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/alipayvoice"      // 支付宝到账语音
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/autowithdraw"     // 触发者撤回时也自动撤回
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baidu"            // 百度一下
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baiduaudit"       // 百度内容审核
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/base16384"        // base16384加解密
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/base64gua"        // base64卦加解密
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baseamasiro"      // base天城文加解密
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/bilibili"         // b站相关
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/bookreview"       // 哀伤雪刃吧推书记录
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/cangtoushi"       // 藏头诗
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chatgpt"          // chatgpt
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chess"            // 国际象棋
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/choose"           // 选择困难症帮手
@@ -88,7 +85,6 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/dish"             // 程序员做饭指南
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/draw"             // draw
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/drawlots"         // 多功能抽签
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/dress"            // 女装
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/driftbottle"      // 漂流瓶
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/emojimix"         // 合成emoji
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/event"            // 好友申请群聊邀请事件处理
@@ -100,16 +96,12 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/gif"              // 制图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/github"           // 搜索GitHub仓库
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/guessmusic"       // 猜歌
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/heisi"            // 黑丝
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/hitokoto"         // 一言
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/hs"               // 炉石
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/hyaku"            // 百人一首
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/imgfinder"        // 关键字搜图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/inject"           // 注入指令
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/jandan"           // 煎蛋网无聊图
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/jiami"            // 兽语加密
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/jptingroom"       // 日语听力学习材料
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/juejuezi"         // 绝绝子生成器
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/kfccrazythursday" // 疯狂星期四
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/lolicon"          // lolicon 随机图片
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/lolimi"           // 桑帛云 API
@@ -129,7 +121,6 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/omikuji"          // 浅草寺求签
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"        // 轮盘赌游戏
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/qqwife"           // 一群一天一夫一妻制群老婆
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/quan"             // QQ权重查询
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/qzone"            // qq空间表白墙
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/realcugan"        // realcugan清晰术
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/reborn"           // 投胎
@@ -146,13 +137,9 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/tracemoe"         // 搜番
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/translation"      // 翻译
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vitsnyaru"        // vits猫雷
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vtbmusic"         // vtb点歌
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vtbquotation"     // vtb语录
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wallet"           // 钱包
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wangyiyun"        // 网易云音乐热评
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wantquotes"       // 据意查句
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/warframeapi"      // warframeAPI插件
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wenben"           // 文本指令大全
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wenxinvilg"       // 百度文心AI画图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wife"             // 抽老婆
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wordcount"        // 聊天热词
@@ -201,6 +188,7 @@ import (
 	//                                                                  //
 	//                                                                  //
 	// -----------------------以下为内置依赖，勿动------------------------ //
+	"github.com/FloatTech/floatbox/file"
 	"github.com/FloatTech/floatbox/process"
 	"github.com/sirupsen/logrus"
 	zero "github.com/wdvxdr1123/ZeroBot"
@@ -238,6 +226,7 @@ func init() {
 	rsz := flag.Uint("r", 4096, "Receiving buffer ring size.")
 	maxpt := flag.Uint("x", 4, "Max process time (min).")
 	markmsg := flag.Bool("m", false, "Don't mark message as read automatically")
+	flag.BoolVar(&file.SkipOriginal, "mirror", false, "Use mirrored lazy data at first")
 
 	flag.Parse()
 
