@@ -235,7 +235,7 @@ func newWordleGame(target string) func(string) (bool, []byte, error) {
 				}
 			}
 			record = append(record, s)
-			if len(record) >= cap(record) {
+			if len(record) > cap(record) {
 				err = errTimesRunOut
 				return
 			}
@@ -269,6 +269,9 @@ func newWordleGame(target string) func(string) (bool, []byte, error) {
 			}
 		}
 		data, err = imgfactory.ToBytes(ctx.Image())
+		if len(record) == cap(record) {
+			err = errTimesRunOut
+		}
 		return
 	}
 }
