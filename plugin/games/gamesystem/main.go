@@ -44,6 +44,7 @@ type GameStatus struct {
 	Info  *GameInfo      `json:"游戏介绍"`
 	Sales map[int64]bool `json:"上架情况"`
 	Rooms []int64        `json:"房间列表"`
+	Users []int64        `json:"幸运名单"`
 }
 
 var (
@@ -286,4 +287,44 @@ func (gameManager *GameStatus) CloseRoom(groupID int64) {
 		}
 	}
 	gameManager.Rooms = append(gameManager.Rooms[:index], gameManager.Rooms[index+1:]...)
+}
+
+// UserIn 判断用户是否为幸运用户
+func (gameManager *GameStatus) UserIn(userID int64) bool {
+	mu.Lock()
+	defer mu.Unlock()
+	for _, uid := range gameManager.Users {
+		if uid == userID {
+			return true
+		}
+	}
+	return false
+}
+
+// addUser 加入幸运用户
+func (gameManager *GameStatus) AddUser(userID int64) error {
+	mu.Lock()
+	defer mu.Unlock()
+	for _, uid := range gameManager.Users {
+		if uid == userID {
+			return nil
+		}
+	}
+	// 加入幸运用户
+	gameManager.Users = append(gameManager.Users, userID)
+	return saveConfig(cfgFile)
+}
+
+// removeUser 移除幸运用户
+func (gameManager *GameStatus) RemoveUser(userID int64) error {
+	mu.Lock()
+	defer mu.Unlock()
+	index := 0
+	for i, uid := range gameManager.Users {
+		if uid == userID {
+			index = i
+		}
+	}
+	gameManager.Users = append(gameManager.Users[:index], gameManager.Users[index+1:]...)
+	return saveConfig(cfgFile)
 }

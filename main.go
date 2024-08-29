@@ -34,6 +34,8 @@ import (
 
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chat" // 基础词库
 
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chatcount" // 聊天时长统计
+
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/sleepmanage" // 统计睡眠时间
 
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/atri" // ATRI词库
@@ -82,6 +84,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/dailynews"        // 今日早报
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/danbooru"         // DeepDanbooru二次元图标签识别
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/diana"            // 嘉心糖发病
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/dianzimeimo"      // 电子魅魔
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/dish"             // 程序员做饭指南
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/draw"             // draw
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/drawlots"         // 多功能抽签
@@ -120,10 +123,13 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/nwife"            // 本地老婆
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/omikuji"          // 浅草寺求签
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"        // 轮盘赌游戏
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/poker"            // 抽扑克
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/qqstore"          // 菜鸟小商店
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/qqwife"           // 一群一天一夫一妻制群老婆
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/qzone"            // qq空间表白墙
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/realcugan"        // realcugan清晰术
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/reborn"           // 投胎
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/robbery"          // 打劫群友的ATRI币
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/runcode"          // 在线运行代码
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/saucenao"         // 以图搜图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/score"            // 分数

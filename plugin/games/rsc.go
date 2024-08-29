@@ -31,6 +31,27 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	engine.OnRegex(`^(加入|移除)幸运用户[\s]*(\d+)$`, zero.SuperUserPermission).SetBlock(true).Limit(ctxext.LimitByUser).
+		Handle(func(ctx *zero.Ctx) {
+			action := ctx.State["regex_matched"].([]string)[1]
+			number := ctx.State["regex_matched"].([]string)[2]
+			uid, err := strconv.ParseInt(number, 10, 64)
+			if err != nil {
+				ctx.SendChain(message.Text("请输入正确的金额"))
+				return
+			}
+			switch action {
+			case "加入":
+				err = gameManager.AddUser(uid)
+			case "移除":
+				err = gameManager.RemoveUser(uid)
+			}
+			if err != nil {
+				ctx.SendChain(message.Text("操作失败"))
+				return
+			}
+			ctx.SendChain(message.Text("操作成功"))
+		})
 	engine.OnRegex(`^猜拳[\s]*(石头|剪刀|布)[\s]*(\d+)$`, func(ctx *zero.Ctx) bool {
 		if gameManager.PlayIn(ctx.Event.GroupID) {
 			return true
@@ -56,6 +77,13 @@ func init() {
 				return
 			}
 			botchoose := 1 + rand.Intn(3)
+			model := ctx.State["regex_matched"].([]string)[1]
+			if gameManager.UserIn(uid) {
+				botchoose = point[model] + 1
+				if botchoose == 4 {
+					botchoose = 1
+				}
+			}
 			botfinger := ""
 			switch botchoose {
 			case 1:
@@ -65,7 +93,6 @@ func init() {
 			case 3:
 				botfinger = "布"
 			}
-			model := ctx.State["regex_matched"].([]string)[1]
 			result := point[model] - botchoose
 
 			// 如果是石头和布的比较，比较值正负取反

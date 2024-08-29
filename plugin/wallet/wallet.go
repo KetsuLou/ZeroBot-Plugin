@@ -9,7 +9,6 @@ import (
 
 	"github.com/FloatTech/AnimeAPI/wallet"
 	"github.com/FloatTech/floatbox/file"
-	fmath "github.com/FloatTech/floatbox/math"
 	ctrl "github.com/FloatTech/zbpctrl"
 	"github.com/FloatTech/zbputils/control"
 	"github.com/FloatTech/zbputils/ctxext"
@@ -40,21 +39,7 @@ func init() {
 		money := wallet.GetWalletOf(uid)
 		ctx.SendChain(message.At(uid), message.Text("你的钱包当前有", money, "杀币"))
 	})
-	en.OnRegex(`^(增加|减少)财富*?(\d+)\s(.*)`, zero.SuperUserPermission).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			action := ctx.State["regex_matched"].([]string)[1]
-			uid := fmath.Str2Int64(ctx.State["regex_matched"].([]string)[2])
-			addMoney, _ := strconv.Atoi(ctx.State["regex_matched"].([]string)[3])
-			if action == "减少" {
-				addMoney = -addMoney
-			}
-			err := wallet.InsertWalletOf(uid, addMoney)
-			if err != nil {
-				ctx.SendChain(message.Text("[ERROR at store.go.10]:", err))
-				return
-			}
-			ctx.SendChain(message.At(uid), message.Text("您的账号", action, "了", addMoney, "杀币"))
-		})
+
 	en.OnFullMatch("查看钱包排名", zero.OnlyGroup).Limit(ctxext.LimitByGroup).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			gid := strconv.FormatInt(ctx.Event.GroupID, 10)

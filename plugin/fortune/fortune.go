@@ -91,18 +91,18 @@ func init() {
 		func(ctx *zero.Ctx) bool {
 			data, err := file.GetLazyData(omikujson, control.Md5File, false)
 			if err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
+				ctx.SendChain(message.Text("ERROR data: ", err))
 				return false
 			}
 			err = json.Unmarshal(data, &omikujis)
 			if err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
+				ctx.SendChain(message.Text("ERROR json: ", err))
 				return false
 			}
 			if fontdata == nil {
 				fontdata, err = file.GetLazyData("data/Font/sakura.ttf", control.Md5File, true)
 				if err != nil {
-					ctx.SendChain(message.Text("ERROR: ", err))
+					ctx.SendChain(message.Text("ERROR fontdata: ", err))
 					return false
 				}
 			}
