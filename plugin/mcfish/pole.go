@@ -384,8 +384,9 @@ func init() {
 		}
 		list := []int{0, 1, 2}
 		check := false
+		randNum := 0
 		if len(articles) > 3 {
-			msg := make(message.Message, 0, 3+len(articles))
+			msg := make(message.Message, 0, 6+len(articles))
 			msg = append(msg, message.Text("找到以下鱼竿:\n"))
 			for i, info := range poles {
 				msg = append(msg, message.Text("[", i, "] ", info.Equip, " : 耐", info.Durable, "/修", info.Maintenance,
@@ -394,7 +395,8 @@ func init() {
 			msg = append(msg, message.Text("————————\n"))
 			msg = append(msg, message.Text("- 输入3个序号进行合成(用空格分割)\n"))
 			msg = append(msg, message.Text("- 输入“取消”，终止本次合成\n"))
-			msg = append(msg, message.Text("- 输入“梭哈“，合成所有鱼竿"))
+			msg = append(msg, message.Text("- 输入“梭哈“，合成所有鱼竿\n"))
+			msg = append(msg, message.Text("注意：梭哈操作合成概率会下降！"))
 			ctx.Send(message.ReplyWithMessage(ctx.Event.MessageID, msg...))
 			// 等待用户下一步选择
 			recv, cancel := zero.NewFutureEvent("message", 999, false, zero.RegexRule(`^(梭哈|取消|\d+ \d+ \d+)$`), zero.CheckUser(ctx.Event.UserID)).Repeat()
@@ -423,6 +425,7 @@ func init() {
 						for i := 3; i < (len(articles)/3)*3; i++ {
 							list = append(list, i)
 						}
+						randNum = 70
 						check = true
 						break
 					}
@@ -451,6 +454,7 @@ func init() {
 						ctx.SendChain(message.At(ctx.Event.UserID), message.Text("[", maxCount, "]请输入正确的序号\n", list))
 						continue
 					}
+					randNum = 90
 					check = true
 				}
 				if check {
@@ -472,24 +476,30 @@ func init() {
 			favorLevel += poles[index].Favor
 			induceLevel += poles[index].Induce
 		}
-		if rand.Intn(100) >= 90 {
-			ctx.Send(
-				message.ReplyWithMessage(ctx.Event.MessageID,
-					message.Text("合成失败,材料已销毁"),
-				),
-			)
-			return
-		}
 		attribute := strconv.Itoa(durationList[thingName]) + "/0/" + strconv.Itoa(induceLevel/upgradeNum) + "/" + strconv.Itoa(favorLevel/upgradeNum)
-		newthing := article{
-			Duration: time.Now().Unix(),
-			Type:     "pole",
-			Name:     thingName,
-			Number:   1,
-			Other:    attribute,
-		}
+		newthing := article{}
+		successNum, failNum := 0, 0
 		// 代码未对article.Number>1的情况做处理，直接生成多个Number=1的鱼竿
 		for i := 0; i < upgradeNum/3; i++ {
+			if rand.Intn(100) >= randNum {
+				if upgradeNum/3 == 1 {
+					ctx.Send(
+						message.ReplyWithMessage(ctx.Event.MessageID,
+							message.Text("合成失败,材料已销毁"),
+						),
+					)
+					return
+				}
+				failNum += 1
+				continue
+			}
+			newthing = article{
+				Duration: time.Now().Unix(),
+				Type:     "pole",
+				Name:     thingName,
+				Number:   1,
+				Other:    attribute,
+			}
 			// 使用时间戳作为主键，增加固定值避免主键冲突
 			newthing.Duration += int64(i * 10)
 			err = dbdata.updateUserThingInfo(uid, newthing)
@@ -497,10 +507,22 @@ func init() {
 				ctx.SendChain(message.Text("[ERROR at pole.go.12]:", err))
 				return
 			}
+			successNum += 1
+		}
+		successInfo := "成功合成：" + strconv.Itoa(successNum) + "个" + thingName
+		failInfo := "失败合成：" + strconv.Itoa(failNum) + "个" + thingName
+		attributeResult := "属性：" + attribute
+		info := ""
+		if successNum == 0 {
+			info = failInfo + "\n"
+		} else if failNum == 0 {
+			info = successInfo + "\n" + attributeResult
+		} else {
+			info = successInfo + "\n" + failInfo + "\n" + attributeResult
 		}
 		ctx.Send(
 			message.ReplyWithMessage(ctx.Event.MessageID,
-				message.Text("成功合成：", upgradeNum/3, "个", thingName, "\n属性: ", attribute),
+				message.Text(info),
 			),
 		)
 	})
