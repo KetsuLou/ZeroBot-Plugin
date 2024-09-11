@@ -68,7 +68,14 @@ func (sql *signdb) queryState(ctx *zero.Ctx, module string) (err error) {
 	}
 	ctx.Send(
 		message.ReplyWithMessage(ctx.Event.MessageID,
-			message.Text("模块: "+module+"\nNAME: "+stateData.NAME+"\nENABLE: "+stateData.ENABLE.String+"\nSTATE: "+stateData.STATE.String+"\nTITLE: "+stateData.TITLE.String+"\nINFO: "+stateData.INFO.String),
+			message.Text("模块: ", module,
+				"\n名称: ", stateData.NAME,
+				"\n是否启用: ", stateData.ENABLE.String,
+				"\n运行状态: ", stateData.STATE.String,
+				"\n标题: ", stateData.TITLE.String,
+				"\n信息: ", stateData.INFO.String,
+				"\n下次运行时间: ", stateData.NEXT.String,
+				"\n最后运行时间: ", stateData.DATE.String),
 		),
 	)
 	return
@@ -133,10 +140,18 @@ func (sql *signdb) updateState(ctx *zero.Ctx, module string) (err error) {
 	}
 	ctx.Send(
 		message.ReplyWithMessage(ctx.Event.MessageID,
-			message.Text("模块: "+module+"\nNAME: "+stateData.NAME+"\nENABLE: "+stateData.ENABLE.String+"\nSTATE: "+stateData.STATE.String+"\nTITLE: "+stateData.TITLE.String+"\nINFO: "+stateData.INFO.String+"\n————————\n输入修改的ENABLE,或回复“取消”取消"),
+			message.Text("模块: ", module,
+				"\n名称: ", stateData.NAME,
+				"\n是否启用: ", stateData.ENABLE.String,
+				"\n运行状态: ", stateData.STATE.String,
+				"\n标题: ", stateData.TITLE.String,
+				"\n信息: ", stateData.INFO.String,
+				"\n下次运行时间: ", stateData.NEXT.String,
+				"\n最后运行时间: ", stateData.DATE.String,
+				"\n————————\n输入修改的启用状态（开启/关闭）,或回复“取消”取消"),
 		),
 	)
-	recv, cancel = zero.NewFutureEvent("message", 999, false, zero.OnlyGroup, zero.RegexRule(`^(True|False|取消)$`), zero.CheckGroup(ctx.Event.GroupID), zero.CheckUser(ctx.Event.UserID)).Repeat()
+	recv, cancel = zero.NewFutureEvent("message", 999, false, zero.OnlyGroup, zero.RegexRule(`^(开启|关闭|取消)$`), zero.CheckGroup(ctx.Event.GroupID), zero.CheckUser(ctx.Event.UserID)).Repeat()
 	defer cancel()
 	check = false
 	enableValue := ""
@@ -159,6 +174,12 @@ func (sql *signdb) updateState(ctx *zero.Ctx, module string) (err error) {
 					),
 				)
 				return
+			}
+			if enableValue == "开启" {
+				enableValue = "True"
+			}
+			if enableValue == "关闭" {
+				enableValue = "False"
 			}
 			check = true
 		}
