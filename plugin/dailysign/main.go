@@ -34,7 +34,8 @@ type signdb struct {
 }
 
 type path struct {
-	PATH string
+	KEY   string
+	VALUE sqlite.NullString
 }
 
 type config struct {
@@ -99,6 +100,9 @@ func init() {
 			dailysign.updateState(ctx)
 		}
 	})
+	engine.OnRegex(`^运行模块脚本\s*(.*)`, zero.OnlyToMe, zero.SuperUserPermission, getdb).SetBlock(true).Limit(ctxext.LimitByGroup).Handle(func(ctx *zero.Ctx) {
+		dailysign.runScript(ctx)
+	})
 }
 
 // 查看配置
@@ -149,6 +153,25 @@ func (sql *dailydb) updateState(ctx *zero.Ctx) (err error) {
 	return
 }
 
+// 运行脚本
+func (sql *dailydb) runScript(ctx *zero.Ctx) (err error) {
+	flag, _ := dailysign.queryCommon(ctx)
+	if !flag {
+		return
+	}
+	module := ctx.State["regex_matched"].([]string)[1]
+	signsql.runScript(ctx, module)
+	signsql.db.Close()
+	return
+}
+
+// 根据条件查询配置
+func (sql *dailydb) queryPathByKey(key string) (pathData path, err error) {
+	err = sql.db.Find("path", &pathData, "where KEY = '"+key+"'")
+	return
+}
+
+// 查询配置文件公共方法
 func (sql *dailydb) queryCommon(ctx *zero.Ctx) (bool, error) {
 	sql.Lock()
 	defer sql.Unlock()
@@ -163,8 +186,8 @@ func (sql *dailydb) queryCommon(ctx *zero.Ctx) (bool, error) {
 		return false, err
 	}
 	pathData := path{}
-	err = sql.db.Find("path", &pathData, "where path IS NOT NULL")
-	if err != nil {
+	err = sql.db.Find("path", &pathData, "where KEY = 'PATH'")
+	if err != nil || pathData.VALUE.String == "" {
 		logrus.Errorln("[ERROR] queryCommon err: ", err)
 		ctx.Send(
 			message.ReplyWithMessage(ctx.Event.MessageID,
@@ -173,7 +196,7 @@ func (sql *dailydb) queryCommon(ctx *zero.Ctx) (bool, error) {
 		)
 		return false, err
 	}
-	signsql.db.DBPath = pathData.PATH
+	signsql.db.DBPath = pathData.VALUE.String
 	err = signsql.db.Open(time.Hour * 24)
 	if err != nil {
 		logrus.Errorln("[ERROR] queryCommon err: ", err)
